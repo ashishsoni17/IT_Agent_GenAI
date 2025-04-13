@@ -132,12 +132,32 @@ def solve_problem(problem_description, agents_to_use=["it"]):
     # for task_name, result in results.items():
     #     combined_solution += f"\n\n{result.raw_output}"
     
-    if isinstance(results, str):
-        return results
+    # if isinstance(results, str):
+    #     return results
+    # elif hasattr(results, 'output'):
+    #     return results.output
+    # else:
+    #     return str(results)
+
+    #
+    structured_output = {}
+
+    # If Crew returns a dict-like object, try extracting individual task results
+    if isinstance(results, dict):
+        for i, (task_name, result) in enumerate(results.items()):
+            structured_output[f"Task {i+1}"] = {
+                "agent": task_name,
+                "output": result.raw_output if hasattr(result, "raw_output") else str(result)
+            }
+    elif isinstance(results, str):
+        structured_output["result"] = results
     elif hasattr(results, 'output'):
-        return results.output
+        structured_output["result"] = results.output
     else:
-        return str(results)
+        structured_output["result"] = str(results)
+
+    return structured_output
+    #
 
 def chatbot_interface():
     """Interactive chat interface for IT problem-solving"""

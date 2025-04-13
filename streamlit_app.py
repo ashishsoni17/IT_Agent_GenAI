@@ -33,4 +33,16 @@ if st.button("🛠 Solve Problem"):
             result = solve_problem(problem, selected_agents)
             st.success("Solution generated!")
             st.markdown("### 💡 Solution")
-            st.code(result, language='markdown')
+            # st.code(result, language='markdown')
+            if isinstance(result, dict):
+                for section, content in result.items():
+                    st.subheader(f"🔹 {section}")
+                    if isinstance(content, dict):
+                        st.markdown(f"**Agent:** {content.get('agent', 'Unknown')}")
+                        st.markdown("**Output:**")
+                        st.code(content.get("output", "No output"), language='markdown')
+                    else:
+                        st.markdown(content)
+            else:
+                st.code(result, language='markdown')
+
