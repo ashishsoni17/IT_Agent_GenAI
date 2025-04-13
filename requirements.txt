@@ -3,3 +3,5 @@
 # requirements.txt
 crewai>=0.28.0
 python-dotenv>=1.0.0
+
+streamlit
